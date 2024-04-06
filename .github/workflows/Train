@@ -1,0 +1,16 @@
+name: Train
+
+on: 
+  pull_request:
+    branches: [main] 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and Push Image
+        run: |
+          docker login -u akashiisc -p ${{ secrets.DOCKERHUB_TOKEN }}  
+          docker build -t akashiisc/cicd_assignment:latest . 
+          docker push akashiisc/cicd_assignment:latest 
