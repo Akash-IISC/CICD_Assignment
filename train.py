@@ -38,7 +38,6 @@ with open("model.pkl", 'wb') as f:
 #with open("model.pkl", 'wb') as f:
  #   pickle.dump(model, f)
 """
-
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
@@ -65,11 +64,12 @@ X_scaled = scaler.fit_transform(X)
 # Hyperparameter Tuning for Logistic Regression
 param_grid_lr = {'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075]}
 
-# Initialize Logistic Regression with class weights
-lr_model = LogisticRegression(penalty='l2', max_iter=500000, class_weight=dict(zip(np.unique(y), class_weights)))
+# Initialize Logistic Regression
+lr_model = LogisticRegression(penalty='l2', max_iter=500000)
 
+# Create GridSearchCV with class weights
 grid_search_lr = GridSearchCV(lr_model, param_grid_lr)
-grid_search_lr.fit(X_scaled, y)
+grid_search_lr.fit(X_scaled, y, **{'class_weight': class_weights})
 
 # Get the best Logistic Regression model
 best_model_lr = grid_search_lr.best_estimator_
