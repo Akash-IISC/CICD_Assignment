@@ -8,19 +8,19 @@ from sklearn.ensemble import RandomForestClassifier #added randomforest
 import pickle
 import numpy as np
 
-#df = pd.read_csv("data/train.csv")
-#X = df.drop(columns=['Disease']).to_numpy()
-#y = df['Disease'].to_numpy()
-#labels = np.sort(np.unique(y))
-#y = np.array([np.where(labels == x) for x in y]).flatten()
-
 df = pd.read_csv("data/train.csv")
 X = df.drop(columns=['Disease']).to_numpy()
-y = df['Disease']
+y = df['Disease'].to_numpy()
+labels = np.sort(np.unique(y))
+y = np.array([np.where(labels == x) for x in y]).flatten()
+
+#df = pd.read_csv("data/train.csv")
+#X = df.drop(columns=['Disease']).to_numpy()
+#y = df['Disease']
 
 # Encoding the target variable
-label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(y)
+#label_encoder = LabelEncoder()
+#y = label_encoder.fit_transform(y)
 
 # Feature Scaling
 scaler = StandardScaler()
