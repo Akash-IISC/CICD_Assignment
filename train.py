@@ -1,7 +1,7 @@
 import pandas as pd
 #from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-#from sklearn.tree import DecisionTreeClassifier #added decision tree
+#from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier #added decision tree
 from sklearn.preprocessing import StandardScaler #added standardscaler
 from sklearn.model_selection import GridSearchCV #added grid search
 import pickle
@@ -18,18 +18,23 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 # SVM with Hyperparameter Tuning
-param_grid = {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf', 'poly']}
-svm_model = SVC()
-grid_search = GridSearchCV(svm_model, param_grid)
-grid_search.fit(X_scaled, y) 
+#param_grid = {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf', 'poly']}
+#svm_model = SVC()
+#grid_search = GridSearchCV(svm_model, param_grid)
+#grid_search.fit(X_scaled, y) 
 
 # Decision Tree with Hyperparameter Tuning
+param_grid = {
+    'max_depth': [2, 3, 4, 5, 8, 10],  
+    'min_samples_split': [2, 5, 10, 15],
+    'ccp_alpha': [0.001, 0.01, 0.1, 0.5, 1, 2] 
+}
 #param_grid = {'max_depth': [3, 5, 8],  
 #              'min_samples_split': [2, 5, 10]}
 
-#dt_model = DecisionTreeClassifier()
-#grid_search = GridSearchCV(dt_model, param_grid)
-#grid_search.fit(X, y)  # Missing values will be handled by the decision tree
+dt_model = DecisionTreeClassifier()
+grid_search = GridSearchCV(dt_model, param_grid)
+grid_search.fit(X_scaled, y)  # Missing values will be handled by the decision tree
 
 # Get the best model
 best_model = grid_search.best_estimator_
