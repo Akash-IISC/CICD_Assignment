@@ -51,8 +51,11 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import make_classification
 from imblearn.over_sampling import SMOTE
 import pickle
+import numpy as np
+
 
 df = pd.read_csv("data/train.csv")
 df = df.dropna()  # Drop rows with missing values
