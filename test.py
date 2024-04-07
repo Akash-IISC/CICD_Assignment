@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 import pickle
 import numpy as np
 
-df = pd.read_csv("data/test.csv")
+
 X = df.drop(columns=['Disease']).to_numpy()
 y = df['Disease'].to_numpy()
 labels = np.sort(np.unique(y))
