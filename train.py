@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 import pickle
+import numpy as np
 
 #Load the data
 df = pd.read_csv("data/train.csv")
