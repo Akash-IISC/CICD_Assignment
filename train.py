@@ -37,8 +37,8 @@ X_scaled = scaler.fit_transform(X)
 #grid_search.fit(X_scaled, y)  # Missing values will be handled by the decision tree
 
 # Hyperparameter Tuning with GridSearchCV
-param_grid = {'C': [0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.122, 0.13]}  # Values of 'C' to try
-grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=20000), param_grid)
+param_grid = {'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075]}  # Values of 'C' to try
+grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=50000), param_grid)
 grid_search.fit(X_scaled, y)
 
 
