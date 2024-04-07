@@ -2,9 +2,9 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 #from sklearn.svm import SVC
 #from sklearn.tree import DecisionTreeClassifier #added decision tree
-from sklearn.preprocessing import StandardScaler, LabelEncoder #added standardscaler and label encoder
+from sklearn.preprocessing import StandardScaler #added standardscaler
 from sklearn.model_selection import GridSearchCV #added grid search
-from sklearn.ensemble import RandomForestClassifier #added randomforest
+#from sklearn.ensemble import RandomForestClassifier #added randomforest
 import pickle
 import numpy as np
 
@@ -50,18 +50,22 @@ X_scaled = scaler.fit_transform(X)
 #grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=5000), param_grid)
 #grid_search.fit(X_scaled, y)
 
+# Hyperparameter Tuning with GridSearchCV
+param_grid = {'C': [0.001, 0.01, 0.1, 1, 10]}  # Values of 'C' to try
+grid_search = GridSearchCV(LogisticRegression(penalty='l1', solver='liblinear', max_iter=2000), param_grid)
+grid_search.fit(X_scaled, y)
 
 # Random Forest with Hyperparameter Tuning
-param_grid = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [5, 10, 15],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
-}
+#param_grid = {
+ #   'n_estimators': [100, 200, 300],
+  #  'max_depth': [5, 10, 15],
+   # 'min_samples_split': [2, 5, 10],
+    #'min_samples_leaf': [1, 2, 4]
+#}
 
-rf_model = RandomForestClassifier(random_state=42)
-grid_search = GridSearchCV(rf_model, param_grid, cv=5)
-grid_search.fit(X_scaled, y)
+#rf_model = RandomForestClassifier(random_state=42)
+#grid_search = GridSearchCV(rf_model, param_grid, cv=5)
+#grid_search.fit(X_scaled, y)
 
 
 # Get the best model
@@ -71,7 +75,7 @@ print("Best model:", best_model)
 
 #model = LogisticRegression().fit(X, y)
 #model = LogisticRegression(max_iter=2000).fit(X, y)
-#model = LogisticRegression(penalty='l2', C=1.0, max_iter=2000).fit(X_scaled, y) #regularization with scaling
+#model = LogisticRegression(penalty='l0', C=1.0, max_iter=2000).fit(X_scaled, y) #regularization with scaling
 
 # Save the best model
 with open("model.pkl", 'wb') as f:
