@@ -18,9 +18,18 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 # Hyperparameter Tuning for Logistic Regression
-param_grid_lr = {'C': [0.031, 0.032, 0.033, 0.034, 0.035, 0.036, 0.037, 0.038, 0.039]}
+#param_grid_lr = {'C': [0.031, 0.032, 0.033, 0.034, 0.035, 0.036, 0.037, 0.038, 0.039]}
+#grid_search_lr = GridSearchCV(LogisticRegression(penalty='l2', max_iter=50000), param_grid_lr)
+#grid_search_lr.fit(X_scaled, y)
 
-grid_search_lr = GridSearchCV(LogisticRegression(penalty='l2', max_iter=50000), param_grid_lr)
+# Hyperparameter Tuning for Logistic Regression
+param_grid_lr = {
+    'C': [0.031, 0.032, 0.033, 0.034, 0.035, 0.036, 0.037, 0.038, 0.039],
+    'penalty': ['l1', 'l2', 'elasticnet'],
+    'l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9]  # Only for elasticnet
+}
+
+grid_search_lr = GridSearchCV(LogisticRegression(max_iter=50000), param_grid_lr)
 grid_search_lr.fit(X_scaled, y)
 
 # Get the best Logistic Regression model
