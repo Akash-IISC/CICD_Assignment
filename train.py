@@ -25,9 +25,9 @@ X_scaled = scaler.fit_transform(X)
 
 # Decision Tree with Hyperparameter Tuning
 param_grid = {
-    'max_depth': [2, 3, 4, 5, 8, 10],  
+    'max_depth': [2, 3, 4, 5],  
     'min_samples_split': [2, 5, 10, 15],
-    'ccp_alpha': [0.001, 0.01, 0.1, 0.5, 1, 2] 
+    'ccp_alpha': [0.01, 0.1, 0.5, 1, 5, 10] 
 }
 #param_grid = {'max_depth': [3, 5, 8],  
 #              'min_samples_split': [2, 5, 10]}
