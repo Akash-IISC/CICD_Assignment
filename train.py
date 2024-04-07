@@ -9,6 +9,8 @@ import pickle
 import numpy as np
 
 df = pd.read_csv("data/train.csv")
+df = df.dropna()  # Drop rows with missing values
+
 X = df.drop(columns=['Disease']).to_numpy()
 y = df['Disease'].to_numpy()
 labels = np.sort(np.unique(y))
@@ -38,21 +40,21 @@ X_scaled = scaler.fit_transform(X)
 #grid_search.fit(X_scaled, y)  # Missing values will be handled by the decision tree
 
 # Hyperparameter Tuning for Logistic Regression
-param_grid_lr = {
-    'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075], 
-    'penalty': ['l1', 'l2', 'elasticnet'],
-    'solver': ['liblinear', 'saga'], 
-    'max_iter': [100000]  
-}
+#param_grid_lr = {
+ #   'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075], 
+  #  'penalty': ['l1', 'l2', 'elasticnet'],
+   # 'solver': ['liblinear', 'saga'], 
+    #'max_iter': [100000]  
+#}
 
 
 # Hyperparameter Tuning for Logistic Regression
-#param_grid_lr = {'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075]}
-grid_search_lr = GridSearchCV(LogisticRegression(), param_grid_lr)
-grid_search_lr.fit(X_scaled, y)
-
-#grid_search_lr = GridSearchCV(LogisticRegression(penalty='l2', max_iter=100000), param_grid_lr)
+param_grid_lr = {'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075]}
+#grid_search_lr = GridSearchCV(LogisticRegression(), param_grid_lr)
 #grid_search_lr.fit(X_scaled, y)
+
+grid_search_lr = GridSearchCV(LogisticRegression(penalty='l2', max_iter=500000), param_grid_lr)
+grid_search_lr.fit(X_scaled, y)
 
 # Get the best Logistic Regression model
 best_model_lr = grid_search_lr.best_estimator_
