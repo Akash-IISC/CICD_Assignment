@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 #from sklearn.tree import DecisionTreeClassifier #added decision tree
 from sklearn.preprocessing import StandardScaler #added standardscaler
 from sklearn.model_selection import GridSearchCV #added grid search
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 import pickle
 import numpy as np
 
