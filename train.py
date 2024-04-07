@@ -38,7 +38,7 @@ X_scaled = scaler.fit_transform(X)
 
 # Hyperparameter Tuning with GridSearchCV
 param_grid = {'C': [100, 50, 10, 5, 3, 1, 0.5, 0.1, 0.01, 0.001, 0.0001]}  # Values of 'C' to try
-grid_search = GridSearchCV(LogisticRegression(penalty='l1', max_iter=1000), param_grid)
+grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=1000), param_grid)
 grid_search.fit(X_scaled, y)
 
 
