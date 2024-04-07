@@ -1,3 +1,4 @@
+"""
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler #added standardscaler
@@ -44,3 +45,40 @@ with open("model.pkl", 'wb') as f:
 
 #with open("model.pkl", 'wb') as f:
  #   pickle.dump(model, f)
+"""
+
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GridSearchCV
+from imblearn.over_sampling import SMOTE
+import pickle
+
+df = pd.read_csv("data/train.csv")
+df = df.dropna()  # Drop rows with missing values
+
+X = df.drop(columns=['Disease']).to_numpy()
+y = df['Disease'].to_numpy()
+
+# Feature Scaling
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Oversample using SMOTE to address class imbalance
+smote = SMOTE()
+X_resampled, y_resampled = smote.fit_resample(X_scaled, y)
+
+# Hyperparameter Tuning for Logistic Regression
+param_grid_lr = {'C': [0.031, 0.032, 0.033, 0.034, 0.035, 0.036, 0.037, 0.038, 0.039]}
+
+grid_search_lr = GridSearchCV(LogisticRegression(max_iter=50000), param_grid_lr)
+grid_search_lr.fit(X_resampled, y_resampled)
+
+# Get the best Logistic Regression model
+best_model_lr = grid_search_lr.best_estimator_
+print("Best parameters for Logistic Regression:", grid_search_lr.best_params_)
+print("Best Logistic Regression model:", best_model_lr)
+
+# Save the best model
+with open("model.pkl", 'wb') as f:
+    pickle.dump(best_model_lr, f)
