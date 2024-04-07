@@ -41,9 +41,8 @@ with open("model.pkl", 'wb') as f:
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GridSearchCV
 from sklearn.utils import class_weight
 import pickle
 import numpy as np
@@ -56,6 +55,9 @@ y = df['Disease'].to_numpy()
 labels = np.sort(np.unique(y))
 y = np.array([np.where(labels == x) for x in y]).flatten()
 
+# Compute class weights
+class_weights = class_weight.compute_class_weight('balanced', np.unique(y), y)
+
 # Feature Scaling
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
@@ -63,11 +65,8 @@ X_scaled = scaler.fit_transform(X)
 # Hyperparameter Tuning for Logistic Regression
 param_grid_lr = {'C': [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.6, 0.065, 0.07, 0.075]}
 
-# Compute class weights
-class_weights = dict(zip(np.unique(y), class_weight.compute_class_weight('balanced', np.unique(y), y)))
-
 # Initialize Logistic Regression with class weights
-lr_model = LogisticRegression(penalty='l2', max_iter=500000, class_weight=class_weights)
+lr_model = LogisticRegression(penalty='l2', max_iter=500000, class_weight=dict(zip(np.unique(y), class_weights)))
 
 grid_search_lr = GridSearchCV(lr_model, param_grid_lr)
 grid_search_lr.fit(X_scaled, y)
