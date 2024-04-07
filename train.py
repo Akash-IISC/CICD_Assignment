@@ -2,16 +2,25 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 #from sklearn.svm import SVC
 #from sklearn.tree import DecisionTreeClassifier #added decision tree
-from sklearn.preprocessing import StandardScaler #added standardscaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder #added standardscaler and label encoder
 from sklearn.model_selection import GridSearchCV #added grid search
+from sklearn.ensemble import RandomForestClassifier #added randomforest
 import pickle
 import numpy as np
 
+#df = pd.read_csv("data/train.csv")
+#X = df.drop(columns=['Disease']).to_numpy()
+#y = df['Disease'].to_numpy()
+#labels = np.sort(np.unique(y))
+#y = np.array([np.where(labels == x) for x in y]).flatten()
+
 df = pd.read_csv("data/train.csv")
 X = df.drop(columns=['Disease']).to_numpy()
-y = df['Disease'].to_numpy()
-labels = np.sort(np.unique(y))
-y = np.array([np.where(labels == x) for x in y]).flatten()
+y = df['Disease']
+
+# Encoding the target variable
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(y)
 
 # Feature Scaling
 scaler = StandardScaler()
@@ -37,8 +46,21 @@ X_scaled = scaler.fit_transform(X)
 #grid_search.fit(X_scaled, y)  # Missing values will be handled by the decision tree
 
 # Hyperparameter Tuning with GridSearchCV
-param_grid = {'C': [5, 3, 1, 0.5, 0.1, 0.01, 0.001, 0.0001]}  # Values of 'C' to try
-grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=5000), param_grid)
+#param_grid = {'C': [5, 3, 1, 0.5, 0.1, 0.01, 0.001, 0.0001]}  # Values of 'C' to try
+#grid_search = GridSearchCV(LogisticRegression(penalty='l2', max_iter=5000), param_grid)
+#grid_search.fit(X_scaled, y)
+
+
+# Random Forest with Hyperparameter Tuning
+param_grid = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [5, 10, 15],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
+
+rf_model = RandomForestClassifier(random_state=42)
+grid_search = GridSearchCV(rf_model, param_grid, cv=5)
 grid_search.fit(X_scaled, y)
 
 
